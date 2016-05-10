@@ -2,7 +2,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 import FalconChatClient.IncomingReader;
 
@@ -84,5 +87,49 @@ public class StarRaptorClient {
 		// Note: we probably need to find a way to tell the panel to repaint.
 	}
 	
+	/**
+	 * tell the server that the state of the keyboard for this player has changed. Only need to send this when there is a change, 
+	 * so don't overdo it!
+	 * @param left
+	 * @param right
+	 * @param thrust
+	 * @param fire
+	 */
+	public void sendKeyBoardStateString(boolean left, boolean right, boolean thrust, boolean fire)
+	{
+		mySocketWriter.println(left+Constants.MNR_DIVIDER +
+							   right+Constants.MNR_DIVIDER+
+							   thrust+Constants.MNR_DIVIDER+
+							   fire);
+		mySocketWriter.flush();
+	}
+	/**
+	 * this class is in charge of hearing back from the server. It runs a thread that will keep looking for the server over
+	 * and over again.
+	 * @author harlan.howe
+	 *
+	 */
+	public class IncomingReader implements Runnable
+	{
+		public void run()
+		{
+			try
+			{
+				// the first thing we receive from the server is this client's assigned ID.
+				myId = Integer.parseInt(mySocketScanner.nextLine());
+				System.out.println("I have been assigned ID# "+myId);
+				while (true)
+				{
+					// wait for a message from the server and have the FalconChatClient act upon it.
+					parseMessage(mySocketScanner.nextLine());
+				}
+			}
+			catch (NoSuchElementException nsee)
+			{
+				JOptionPane.showConfirmDialog(null, "Lost connection.");
+				System.exit(1);
+			}
+		}
+	}
 	
 }
