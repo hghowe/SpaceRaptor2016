@@ -88,7 +88,10 @@ public class GamePanel extends JPanel implements KeyListener{
 		do
 		{
 		   initials = JOptionPane.showInputDialog("Please enter your initials.");
-		} while (initials == null || initials.equals(""));
+		} while (initials == null || 
+				initials.equals("") ||
+				initials.indexOf(Constants.MJR_DIVIDER)>-1 ||
+				initials.indexOf(Constants.MNR_DIVIDER)>-1);
 		return initials.substring(0,Math.min(3, initials.length())).toUpperCase();
 	}
 }
