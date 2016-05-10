@@ -33,7 +33,8 @@ public class GamePanel extends JPanel implements KeyListener{
 		super.paintComponent(g);
 		for (Integer key:objectsOnScreen.keySet())
 		{
-			((Drawable)(objectsOnScreen.get(key))).drawSelf(g);
+			if (objectsOnScreen.containsKey(key))
+				((Drawable)(objectsOnScreen.get(key))).drawSelf(g);
 		}
 	}
 
