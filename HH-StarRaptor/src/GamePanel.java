@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements KeyListener{
 
 	private Map<Integer,Transmittable> objectsOnScreen;
+	private boolean objectsLocked;
 	private boolean leftPressed, rightPressed, thrustPressed, firePressed;
 	private StarRaptorClient theClient;
 	
@@ -31,11 +32,13 @@ public class GamePanel extends JPanel implements KeyListener{
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
+		
 		for (Integer key:objectsOnScreen.keySet())
 		{
 			if (objectsOnScreen.containsKey(key) && objectsOnScreen.get(key) != null)
 				((Drawable)(objectsOnScreen.get(key))).drawSelf(g);
 		}
+		
 	}
 
 	@Override
@@ -89,5 +92,22 @@ public class GamePanel extends JPanel implements KeyListener{
 				initials.indexOf(Constants.MJR_DIVIDER)>-1 ||
 				initials.indexOf(Constants.MNR_DIVIDER)>-1);
 		return initials.substring(0,Math.min(3, initials.length())).toUpperCase();
+	}
+	
+	public void lock()
+	{
+		assert objectsLocked == false;
+		objectsLocked = true;
+	}
+	
+	public void unlock()
+	{
+		assert objectsLocked == true;
+		objectsLocked = false;
+	}
+	
+	public boolean locked()
+	{
+		return objectsLocked;
 	}
 }

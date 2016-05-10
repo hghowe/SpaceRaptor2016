@@ -14,14 +14,13 @@ public class StarRaptorClient {
 	private int myId;
 	private String myName;
 	private Map<Integer,Transmittable> objectsOnScreen;
-	private JPanel thePanel;
-	
+	private GamePanel thePanel;	
 	private Socket 		mySocket;
 	private Scanner 		mySocketScanner;
 	private PrintWriter 	mySocketWriter;
 
 	
-	public StarRaptorClient(Map<Integer,Transmittable> objMap, String name, JPanel panel) 
+	public StarRaptorClient(Map<Integer,Transmittable> objMap, String name, GamePanel panel) 
 	{
 		objectsOnScreen = objMap;
 		myName = name;
@@ -82,18 +81,27 @@ public class StarRaptorClient {
 				{
 					System.out.println("Uh-oh. created a null object.");
 				}
+				while(thePanel.locked());
+				thePanel.lock();
 				objectsOnScreen.put(theId, newbie);
+				thePanel.unlock();
 				System.out.println("There are now "+objectsOnScreen.size()+" objects on screen.");
 			break;
 			case Constants.PREFIX_UPDATE_OBJECT:
 				theId = Integer.parseInt(messageSequence[1]);
+				while(thePanel.locked());
+				thePanel.lock();
 				Transmittable objectInQuestion = objectsOnScreen.get(theId);
+				thePanel.unlock();
 				objectInQuestion.updateFromDescription(messageSequence[2]);
 				
 			break;
 			case Constants.PREFIX_REMOVE_OBJECT:
 				theId = Integer.parseInt(messageSequence[1]);
+				while(thePanel.locked());
+				thePanel.lock();
 				objectsOnScreen.remove(theId);
+				thePanel.unlock();
 			break;
 		
 		}
