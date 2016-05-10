@@ -1,17 +1,24 @@
+import java.io.PrintWriter;
 
 public class ServerRaptor extends AbstractRaptor {
 
 	private double vx, vy;
 	private boolean isTurningLeft, isTurningRight, isThrusting;
 	
+	private PrintWriter myPrintWriter; // This is a writer that will send things to the corresponding client....
 	
-	public ServerRaptor() {
+	public ServerRaptor(String initials, int id, PrintWriter pw) {
 		super();
+		this.setInitials(initials);
+		this.setId(id);
+		myPrintWriter = pw;
+		
 		vx = 0;
 		vy = 0;
 		isTurningLeft = false;
 		isTurningRight = false;
 		isThrusting = false;
+		
 	}
 	
 	public void step(double deltaT)
@@ -28,5 +35,11 @@ public class ServerRaptor extends AbstractRaptor {
 		
 		setxPos(getxPos()+vx*deltaT);
 		setyPos(getyPos()+vy*deltaT);
+	}
+	
+	public void sendMessage(String message)
+	{
+		myPrintWriter.println(message);
+		myPrintWriter.flush();
 	}
 }
