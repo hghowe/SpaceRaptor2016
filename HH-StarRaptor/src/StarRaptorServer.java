@@ -158,6 +158,8 @@ public class StarRaptorServer extends TimerTask
 		int type = -1;
 		if (obj instanceof ServerRaptor)
 			type = Constants.TYPE_RAPTOR;
+		if (obj instanceof ServerBullet)
+			type = Constants.TYPE_BULLET;
 		String message = Constants.PREFIX_NEW_OBJECT+
 						  Constants.MJR_DIVIDER+
 						  type + 
