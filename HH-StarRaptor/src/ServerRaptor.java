@@ -1,6 +1,6 @@
 import java.io.PrintWriter;
 
-public class ServerRaptor extends AbstractRaptor {
+public class ServerRaptor extends AbstractRaptor implements Steppable{
 
 	private double vx, vy;
 	private boolean isTurningLeft, isTurningRight, isThrusting;
