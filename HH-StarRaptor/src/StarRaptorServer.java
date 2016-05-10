@@ -18,6 +18,7 @@ public class StarRaptorServer extends TimerTask
 	private ServerSocket mySocket;
 	private Map<Integer,Transmittable> objectsOnScreen;
 	private Map<Integer,ServerRaptor> raptors;
+	private Map<Integer,ServerBullet> bullets;
 	
 	private Date lastTime;
 	
@@ -29,6 +30,7 @@ public class StarRaptorServer extends TimerTask
 		lastTime = new Date();
 		objectsOnScreen = new HashMap<Integer,Transmittable>();
 		raptors = new HashMap<Integer,ServerRaptor>();
+		bullets = new HashMap<Integer,ServerBullet>();
 		t.scheduleAtFixedRate(this, 0, 20); 	// this is the TimerTask class whose run()
 		// method will be called. 0 is the delay before
 		// the method is called first; 20 is the delay
@@ -102,6 +104,34 @@ public class StarRaptorServer extends TimerTask
 			((Steppable)(objectsOnScreen.get(id))).step(deltaT);
 			broadcastChange(id, objectsOnScreen.get(id));
 		}
+		
+		for (Integer id: raptors.keySet())
+		{
+			if ((raptors.get(id).isFiring()) && (raptors.get(id).canFire()))
+			{
+				ServerBullet bullet = new ServerBullet();
+				bullet.setxPos(raptors.get(id).getxPos());
+				bullet.setyPos(raptors.get(id).getyPos());
+				bullet.setVx(Constants.BULLET_SPEED * Math.cos(raptors.get(id).getAngle()));
+				bullet.setVy(Constants.BULLET_SPEED * Math.sin(raptors.get(id).getAngle()));
+				objectsOnScreen.put(bullet.getId(),bullet);
+				bullets.put(bullet.getId(),bullet);
+				broadcastAdd(bullet.getId(),bullet);
+				
+				raptors.get(id).resetFireTime();
+			}	
+		}
+		
+		for (Integer id: bullets.keySet())
+		{
+			if (! bullets.get(id).isAlive())
+			{
+				objectsOnScreen.remove(id);
+				bullets.remove(id);
+				broadcastRemove(id);
+			}
+		}
+		
 		
 		lastTime = now;
 		
