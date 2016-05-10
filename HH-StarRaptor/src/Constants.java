@@ -14,4 +14,10 @@ public interface Constants {
 	
 	public final double TURN_RATE = 3.14159;
 	public final double THRUST_POWER = 100;
+	
+	public final int SCREEN_WIDTH = 800;
+	public final int SCREEN_HEIGHT = 800;
+	
+	public final int MAX_RAPTOR_SPEED = 200;
+	public final int MAX_RAPTOR_SPEED_SQUARED = 40000;
 }

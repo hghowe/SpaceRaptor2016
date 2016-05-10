@@ -43,6 +43,14 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 			vy += Constants.THRUST_POWER*Math.sin(getAngle())*deltaT;
 		}
 		
+		double vMagSquared = vx*vx+vy+vy;
+		if (vMagSquared > Constants.MAX_RAPTOR_SPEED_SQUARED)
+		{
+			double vMag = Math.sqrt(vMagSquared);
+			vx *= Constants.MAX_RAPTOR_SPEED/vMag;
+			vy *= Constants.MAX_RAPTOR_SPEED/vMag;
+		}
+		
 		setxPos(getxPos()+vx*deltaT);
 		setyPos(getyPos()+vy*deltaT);
 		
