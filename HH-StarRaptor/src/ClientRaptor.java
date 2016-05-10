@@ -12,7 +12,7 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 	public ClientRaptor() {
 		super();
 		isPlayer = false;
-		initialFont = new Font("Arial",Font.PLAIN,6);
+		initialFont = new Font("Arial",Font.PLAIN,8);
 	}
 
 	/**
@@ -40,7 +40,8 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 		
 		AffineTransform AF = g2d.getTransform();
 			g2d.translate(getxPos(), getyPos());
-			g2d.drawString(getInitials(), -10, -10);
+			int stringWidth = g2d.getFontMetrics().stringWidth(getInitials());
+			g2d.drawString(getInitials(), -stringWidth/2, -10);
 			g2d.rotate(getAngle());
 			g2d.drawLine(4, 0, -3, -2);
 			g2d.drawLine(-3, -2, -1, 0);
