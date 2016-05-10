@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class StarRaptorClient {
 
@@ -13,16 +14,18 @@ public class StarRaptorClient {
 	private int myId;
 	private String myName;
 	private Map<Integer,Transmittable> objectsOnScreen;
+	private JPanel thePanel;
 	
 	private Socket 		mySocket;
 	private Scanner 		mySocketScanner;
 	private PrintWriter 	mySocketWriter;
 
 	
-	public StarRaptorClient(Map<Integer,Transmittable> objMap, String name) 
+	public StarRaptorClient(Map<Integer,Transmittable> objMap, String name, JPanel panel) 
 	{
 		objectsOnScreen = objMap;
 		myName = name;
+		thePanel = panel;
 		setupConnection();	
 	}
 	
@@ -83,7 +86,7 @@ public class StarRaptorClient {
 			break;
 		
 		}
-		// Note: we probably need to find a way to tell the panel to repaint.
+		thePanel.repaint(); // we've changed something about the screen - we'd better repaint it!
 	}
 	
 	/**
