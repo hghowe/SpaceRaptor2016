@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		rightPressed = false;
 		thrustPressed = false;
 		firePressed = false;
-		
+		theClient = new StarRaptorClient(objectsOnScreen, requestInitials(), this);
 	}
 
 	/**
