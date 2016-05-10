@@ -71,7 +71,12 @@ public class StarRaptorClient {
 					if (theId == myId)
 						raptor.setPlayer(true);
 					newbie = raptor;
-					
+				}
+				else if (type == Constants.TYPE_BULLET)
+				{
+					ClientBullet bullet = new ClientBullet();
+					bullet.buildFromDescription(messageSequence[3]);
+					newbie = bullet;
 				}
 				objectsOnScreen.put(theId, newbie);
 				System.out.println("There are now "+objectsOnScreen.size()+" objects on screen.");
