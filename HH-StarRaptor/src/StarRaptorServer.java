@@ -27,12 +27,13 @@ public class StarRaptorServer extends TimerTask
 		nextAvailableID = 0;
 		Timer t = new Timer();
 		lastTime = new Date();
-		t.scheduleAtFixedRate(this, 0, 20); 	// this is the TimerTask class whose run()
-											// method will be called. 0 is the delay before
-											// the method is called first; 20 is the delay
-											// (in ms) between calls of run().
 		objectsOnScreen = new HashMap<Integer,Transmittable>();
 		raptors = new HashMap<Integer,ServerRaptor>();
+		t.scheduleAtFixedRate(this, 0, 20); 	// this is the TimerTask class whose run()
+		// method will be called. 0 is the delay before
+		// the method is called first; 20 is the delay
+		// (in ms) between calls of run().
+
 		setupNetworking();
 		
 	}
@@ -64,6 +65,7 @@ public class StarRaptorServer extends TimerTask
 				// add the new raptor to the list of all raptors.
 				objectsOnScreen.put(nextAvailableID, nextRaptor);
 				raptors.put(nextAvailableID, nextRaptor);
+				tellRaptorAll(nextAvailableID);
 				
 				// tell everybody about this new raptor.
 				broadcastAdd(nextAvailableID, nextRaptor);
