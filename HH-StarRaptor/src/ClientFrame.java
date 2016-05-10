@@ -19,6 +19,7 @@ public class ClientFrame extends JFrame {
 		getContentPane().setLayout(new GridLayout(1,1));
 		myPanel = new GamePanel();
 		getContentPane().add(myPanel);
+		addKeyListener(myPanel);
 		setVisible(true);
 	}
 
