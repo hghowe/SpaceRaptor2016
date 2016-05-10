@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
-import FalconChatClient.IncomingReader;
-
 public class StarRaptorClient {
 
 	private String myInitials;
@@ -28,28 +26,29 @@ public class StarRaptorClient {
 		setupConnection();	
 	}
 	
+	/**
+	 * initiate the connection to the server.
+	 */
 	public void setupConnection()
 	{
 		System.out.println("Awaiting connection to server.");
 		try
-			{
-				mySocket = new Socket(Constants.IP_ADDRESS,5000); // communicating with the server via channel 5000.
-				mySocketScanner = new Scanner(mySocket.getInputStream());
-				mySocketWriter = new PrintWriter(mySocket.getOutputStream());
-				Thread readerThread = new Thread(new IncomingReader()); // this class gets written later in this file.
-				readerThread.start();
-				
-				mySocketWriter.println(myName); // add my name to the things to send to the server
-				mySocketWriter.flush();         // ...and send it.
-				// Note: the server is expecting you to immediately send your name.
-				System.out.println("Connected.");
-			}
-			catch (IOException e)
-			{
-				System.out.println("I couldn't connect.");
-				e.printStackTrace();
-			}
-		
+		{
+			mySocket = new Socket(Constants.IP_ADDRESS,5000); // communicating with the server via channel 5000.
+			mySocketScanner = new Scanner(mySocket.getInputStream());
+			mySocketWriter = new PrintWriter(mySocket.getOutputStream());
+			Thread readerThread = new Thread(new IncomingReader()); // this class gets written later in this file.
+			readerThread.start();
+			
+			mySocketWriter.println(myName); // add my name to the things to send to the server
+			mySocketWriter.flush();         // ...and send it.
+			// Note: the server is expecting you to immediately send your name.
+			System.out.println("Connected.");
+		}
+		catch (IOException e)
+		{
+			System.out.println("I couldn't connect.");
+			e.printStackTrace();
 		}
 	}
 	public void parseMessage(String message)
@@ -61,7 +60,7 @@ public class StarRaptorClient {
 			case Constants.PREFIX_NEW_OBJECT:
 				int type = Integer.parseInt(messageSequence[1]);
 				theId = Integer.parseInt(messageSequence[2]);
-				Transmittable newbie;
+				Transmittable newbie = null;
 				if (type == Constants.TYPE_RAPTOR)
 				{	ClientRaptor raptor = new ClientRaptor();
 					raptor.buildFromDescription(messageSequence[3]);
