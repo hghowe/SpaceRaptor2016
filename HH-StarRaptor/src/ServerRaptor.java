@@ -3,7 +3,7 @@ import java.io.PrintWriter;
 public class ServerRaptor extends AbstractRaptor implements Steppable{
 
 	private double vx, vy;
-	private boolean isTurningLeft, isTurningRight, isThrusting;
+	private boolean isTurningLeft, isTurningRight, isThrusting, isFiring;
 	
 	private PrintWriter myPrintWriter; // This is a writer that will send things to the corresponding client....
 	
@@ -18,8 +18,18 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 		isTurningLeft = false;
 		isTurningRight = false;
 		isThrusting = false;
-		
+		isFiring = false;
 	}
+	
+	public void setControlStates(boolean left, boolean right, boolean thrust, boolean fire)
+	{
+		isTurningLeft = left;
+		isTurningRight = right;
+		isThrusting = thrust;
+		isFiring = fire;
+	}
+	
+	public boolean isFiring() { return isFiring; }
 	
 	public void step(double deltaT)
 	{
