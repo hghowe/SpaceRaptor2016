@@ -4,6 +4,7 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements KeyListener{
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		rightPressed = false;
 		thrustPressed = false;
 		firePressed = false;
-		theClient = new StarRaptorClient(objectsOnScreen, "HGH", this);
+		theClient = new StarRaptorClient(objectsOnScreen, requestInitials(), this);
 		ClientRaptor testRaptor = new ClientRaptor();
 		testRaptor.buildFromDescription("0\tHGH\t400\t400\t0.5235");
 		objectsOnScreen.put(testRaptor.getId(),testRaptor);
@@ -77,4 +78,17 @@ public class GamePanel extends JPanel implements KeyListener{
 		theClient.sendKeyBoardStateString(leftPressed, rightPressed, thrustPressed, firePressed);
 	}
 	
+	/**
+	 * asks the user for his/her name. 
+	 * @return a non-empty String.
+	 */
+	public String requestInitials()
+	{
+		String initials;
+		do
+		{
+		   initials = JOptionPane.showInputDialog("Please enter your initials.");
+		} while (initials == null || initials.equals(""));
+		return initials.substring(0,Math.min(3, initials.length())).toUpperCase();
+	}
 }
