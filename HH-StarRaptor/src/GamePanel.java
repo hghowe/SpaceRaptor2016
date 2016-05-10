@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,6 +22,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		thrustPressed = false;
 		firePressed = false;
 		theClient = new StarRaptorClient(objectsOnScreen, requestInitials(), this);
+		setBackground(Color.BLACK);
 	}
 
 	/**
