@@ -12,7 +12,7 @@ public class ClientFrame extends JFrame {
 	public ClientFrame() 
 	{
 		super("StarRaptor");
-		setSize(800,800);
+		setSize(Constants.SCREEN_WIDTH,Constants.SCREEN_HEIGHT);
 		setBackground(Color.BLACK);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
