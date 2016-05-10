@@ -137,6 +137,31 @@ public class StarRaptorServer extends TimerTask
 	}
 	
 	/**
+	 * sends "ADD" messages about all objects on screen to one particular raptor. 
+	 * Presumably, this would be used when a new raptor is created and needs to know
+	 * about what else is on screen. Time consuming, so don't do this more often than
+	 * necessary.
+	 * @param id - which raptor are we telling about everything?
+	 */
+	public void tellRaptorAll(int id)
+	{
+		for (Integer key: objectsOnScreen.keySet())
+		{
+			int type = -1;
+			if (objectsOnScreen.get(key) instanceof ServerRaptor)
+				type = Constants.TYPE_RAPTOR;
+			String message = Constants.PREFIX_NEW_OBJECT+
+					  Constants.MJR_DIVIDER+
+					  type + 
+					  Constants.MJR_DIVIDER+
+					  key +
+					  Constants.MJR_DIVIDER+
+					  objectsOnScreen.get(key).longDescription();
+			raptors.get(id).sendMessage(message);
+		}
+	}
+	
+	/**
 	 * send the given message to every chatterer in the list.
 	 * @param messageType - which type of message to send
 	 * @param params - an array of strings to send, tab-delimited.
