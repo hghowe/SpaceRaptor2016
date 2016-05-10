@@ -137,6 +137,17 @@ public class StarRaptorServer extends TimerTask
 	}
 	
 	/**
+	 * tell all the Raptors about the departure of the given object from the screen.
+	 * @param id
+	 */
+	public void broadcastRemove(int id)
+	{
+		String message = Constants.PREFIX_REMOVE_OBJECT+Constants.MJR_DIVIDER+id;
+		for (Integer key: raptors.keySet())
+			raptors.get(key).sendMessage(message);
+	}
+	
+	/**
 	 * sends "ADD" messages about all objects on screen to one particular raptor. 
 	 * Presumably, this would be used when a new raptor is created and needs to know
 	 * about what else is on screen. Time consuming, so don't do this more often than
@@ -161,25 +172,7 @@ public class StarRaptorServer extends TimerTask
 		}
 	}
 	
-	/**
-	 * send the given message to every chatterer in the list.
-	 * @param messageType - which type of message to send
-	 * @param params - an array of strings to send, tab-delimited.
-	 */
-	public void broadcast(int messageType, String[] params)
-	{
-		System.out.println("Num chatterers: "+raptors.size());
-		String message = messageTypes[messageType];
-		for (String s: params)
-		{
-			message += "\t"+s;
-		}
-		Set<Integer> allIDs = chatterers.keySet();
-		for (Integer id: allIDs)
-		{
-			chatterers.get(id).sendMessage(message);
-		}
-	}
+	
 	
 	
 	
@@ -208,9 +201,7 @@ public class StarRaptorServer extends TimerTask
 	 */
 	public void disconnectClient(int whichID)
 	{
-		System.out.println("Disconnecting "+whichID);
-		System.out.println("Keys: "+raptors.keySet());
-		broadcast(2, new String[] {raptors.get(whichID).getName()});  // 2 is the code number for "LEAVING"
+		broadcastRemove(whichID);
 		raptors.remove(whichID);
 		objectsOnScreen.remove(whichID);
 		
