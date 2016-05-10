@@ -81,7 +81,7 @@ public class StarRaptorClient {
 				objectInQuestion.updateFromDescription(messageSequence[2]);
 			break;
 			case Constants.PREFIX_REMOVE_OBJECT:
-				theId = Integer.parseInt(messageSequence[2]);
+				theId = Integer.parseInt(messageSequence[1]);
 				objectsOnScreen.put(theId,null);
 			break;
 		
