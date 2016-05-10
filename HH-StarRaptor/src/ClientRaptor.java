@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 public class ClientRaptor extends AbstractRaptor implements Drawable{
 
@@ -32,12 +33,14 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 			g2d.setColor(new Color(255,255,255));
 		else
 			g2d.setColor(new Color(255,0,0));
-		g2d.translate(getxPos(), getyPos());
-		g2d.rotate(getAngle());
-		g2d.drawLine(4, 0, -3, -2);
-		g2d.drawLine(-3, -2, -1, 0);
-		g2d.drawLine(-1, 0, -3, 2);
-		g2d.drawLine(-2, 2, 4, 0);
+		AffineTransform AF = g2d.getTransform();
+			g2d.translate(getxPos(), getyPos());
+			g2d.rotate(getAngle());
+			g2d.drawLine(4, 0, -3, -2);
+			g2d.drawLine(-3, -2, -1, 0);
+			g2d.drawLine(-1, 0, -3, 2);
+			g2d.drawLine(-2, 2, 4, 0);
+		g2d.setTransform(AF);
 	}
 	
 	
