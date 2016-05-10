@@ -10,7 +10,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
 	private Map<Integer,Transmittable> objectsOnScreen;
 	private boolean leftPressed, rightPressed, thrustPressed, firePressed;
-	
+	private StarRaptorClient theClient;
 	
 	public GamePanel() {
 		super();
@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		rightPressed = false;
 		thrustPressed = false;
 		firePressed = false;
+		theClient = new StarRaptorClient(objectsOnScreen, "HGH", this);
 		ClientRaptor testRaptor = new ClientRaptor();
 		testRaptor.buildFromDescription("0\tHGH\t400\t400\t0.5235");
 		objectsOnScreen.put(testRaptor.getId(),testRaptor);
@@ -28,8 +29,12 @@ public class GamePanel extends JPanel implements KeyListener{
 		objectsOnScreen.put(testRaptor2.getId(),testRaptor2);
 	}
 
+	/**
+	 * draws the screen. This will automatically be called shortly after repaint(), on a regular cycle.
+	 */
 	public void paintComponent(Graphics g)
 	{
+		super.paintComponent(g);
 		for (Integer key:objectsOnScreen.keySet())
 		{
 			((Drawable)(objectsOnScreen.get(key))).drawSelf(g);
@@ -46,25 +51,30 @@ public class GamePanel extends JPanel implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode()== KeyEvent.VK_LEFT)
 			leftPressed = true;
-		if (e.getKeyCode()== KeyEvent.VK_RIGHT)
+		else if (e.getKeyCode()== KeyEvent.VK_RIGHT)
 			rightPressed = true;
-		if (e.getKeyCode()== KeyEvent.VK_UP)
+		else if (e.getKeyCode()== KeyEvent.VK_UP)
 			thrustPressed = true;
-		if (e.getKeyCode()== KeyEvent.VK_SPACE)
+		else if (e.getKeyCode()== KeyEvent.VK_SPACE)
 			firePressed = true;
-		System.out.println(""+leftPressed+rightPressed+thrustPressed+firePressed);
+		else
+			return;
+		theClient.sendKeyBoardStateString(leftPressed, rightPressed, thrustPressed, firePressed);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode()== KeyEvent.VK_LEFT)
 			leftPressed = false;
-		if (e.getKeyCode()== KeyEvent.VK_RIGHT)
+		else if (e.getKeyCode()== KeyEvent.VK_RIGHT)
 			rightPressed = false;
-		if (e.getKeyCode()== KeyEvent.VK_UP)
+		else if (e.getKeyCode()== KeyEvent.VK_UP)
 			thrustPressed = false;
-		if (e.getKeyCode()== KeyEvent.VK_SPACE)
+		else if (e.getKeyCode()== KeyEvent.VK_SPACE)
 			firePressed = false;
+		else
+			return;
+		theClient.sendKeyBoardStateString(leftPressed, rightPressed, thrustPressed, firePressed);
 	}
 	
 }
