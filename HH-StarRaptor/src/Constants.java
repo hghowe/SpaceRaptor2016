@@ -10,4 +10,5 @@ public interface Constants {
 	public final int TYPE_RAPTOR = 0;
 	public final int TYPE_BULLET = 1;
 	
+	public final String IP_ADDRESS = "172.16.220.122";
 }
