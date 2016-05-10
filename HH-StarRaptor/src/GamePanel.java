@@ -20,14 +20,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		rightPressed = false;
 		thrustPressed = false;
 		firePressed = false;
-		theClient = new StarRaptorClient(objectsOnScreen, requestInitials(), this);
-		ClientRaptor testRaptor = new ClientRaptor();
-		testRaptor.buildFromDescription("0\tHGH\t400\t400\t0.5235");
-		objectsOnScreen.put(testRaptor.getId(),testRaptor);
-		ClientRaptor testRaptor2 = new ClientRaptor();
-		testRaptor2.buildFromDescription("1\tHGH\t400\t450\t-1.047");
-		testRaptor2.setPlayer(true);
-		objectsOnScreen.put(testRaptor2.getId(),testRaptor2);
+		
 	}
 
 	/**
