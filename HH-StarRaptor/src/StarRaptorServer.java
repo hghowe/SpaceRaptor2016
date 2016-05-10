@@ -7,11 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import FalconChatServer.ClientReader;
 
 public class StarRaptorServer extends TimerTask
 {
@@ -56,16 +53,16 @@ public class StarRaptorServer extends TimerTask
 				// build a ClientReader that will start to constantly listen for message from this client.
 				ClientReader cr = new ClientReader(clientSocket, pw); // note: this class is written later in this file.
 				
-				// build a Chatterer instance that will represent the person on the other end of this connection, one
+				// build a ServerRaptor instance that will represent the person on the other end of this connection, one
 				//    to whom we can send messages.
 				ServerRaptor nextRaptor = new ServerRaptor(cr.getInitials(),nextAvailableID, pw); 
 				
-				// add the new chatterer to the list of all chatterers.
+				// add the new raptor to the list of all raptor.
 				objectsOnScreen.put(nextAvailableID, nextRaptor);
 				raptors.put(nextAvailableID, nextRaptor);
 				
-				// tell everybody about this new chatterer.
-				broadcast(0,new String[]{""+nextAvailableID, cr.getName()});
+				// tell everybody about this new raptor.
+				broadcastAdd(nextAvailableID, nextRaptor);
 				
 				nextAvailableID++;
 			}
@@ -176,22 +173,17 @@ public class StarRaptorServer extends TimerTask
 	
 	
 	
-	public void handleMessage(String message, int chattererID)
+	public void handleMessage(String message, int raptorID)
 	{
-		String[] messageComponents = message.split("\t");
-		System.out.println("Received message: "+message+"From:" + chatterers.get(chattererID).getName());
+		String[] messageComponents = message.split(Constants.MNR_DIVIDER);
 		
-		// In this program, the clients only ever send one type of message - a piece of text they want everybody to read.
-		if (messageComponents[0].equals(messageTypes[1]))
-		{
-			String outgoingMessage = "";
-			for (int i=1; i<messageComponents.length; i++)
-			{	outgoingMessage += messageComponents[i];
-				if (i < messageComponents.length-1)
-					outgoingMessage+= " ";
-			}
-			broadcast(1, new String[] {chatterers.get(chattererID).getName(),outgoingMessage});
-		}
+		// In this program, the clients only ever send one type of message - the state of the controls held by the player.
+		boolean leftPressed   = Boolean.parseBoolean(messageComponents[0]);
+		boolean rightPressed  = Boolean.parseBoolean(messageComponents[1]);
+		boolean thrustPressed = Boolean.parseBoolean(messageComponents[2]);
+		boolean firePressed   = Boolean.parseBoolean(messageComponents[3]);
+		
+		raptors.get(raptorID).setControlStates(leftPressed,rightPressed,thrustPressed,firePressed);
 	}
 
 	/**
