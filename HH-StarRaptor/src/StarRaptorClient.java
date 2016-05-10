@@ -78,6 +78,10 @@ public class StarRaptorClient {
 					bullet.buildFromDescription(messageSequence[3]);
 					newbie = bullet;
 				}
+				else
+				{
+					System.out.println("Uh-oh. created a null object.");
+				}
 				objectsOnScreen.put(theId, newbie);
 				System.out.println("There are now "+objectsOnScreen.size()+" objects on screen.");
 			break;
