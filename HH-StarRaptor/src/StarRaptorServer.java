@@ -26,6 +26,7 @@ public class StarRaptorServer extends TimerTask
 		System.out.println("Initializing.");
 		nextAvailableID = 0;
 		Timer t = new Timer();
+		lastTime = new Date();
 		t.scheduleAtFixedRate(this, 0, 20); 	// this is the TimerTask class whose run()
 											// method will be called. 0 is the delay before
 											// the method is called first; 20 is the delay
@@ -33,7 +34,7 @@ public class StarRaptorServer extends TimerTask
 		objectsOnScreen = new HashMap<Integer,Transmittable>();
 		raptors = new HashMap<Integer,ServerRaptor>();
 		setupNetworking();
-		lastTime = new Date();
+		
 	}
 	
 	public void setupNetworking()
@@ -56,8 +57,11 @@ public class StarRaptorServer extends TimerTask
 				// build a ServerRaptor instance that will represent the person on the other end of this connection, one
 				//    to whom we can send messages.
 				ServerRaptor nextRaptor = new ServerRaptor(cr.getInitials(),nextAvailableID, pw); 
-				
-				// add the new raptor to the list of all raptor.
+				nextRaptor.setxPos(Math.random()*Constants.SCREEN_WIDTH);
+				nextRaptor.setyPos(Math.random()*Constants.SCREEN_HEIGHT);
+				nextRaptor.setAngle(Math.random()*Math.PI*2);
+				System.out.println("Added: "+nextRaptor.longDescription());
+				// add the new raptor to the list of all raptors.
 				objectsOnScreen.put(nextAvailableID, nextRaptor);
 				raptors.put(nextAvailableID, nextRaptor);
 				
@@ -94,7 +98,7 @@ public class StarRaptorServer extends TimerTask
 		for (Integer id: objectsOnScreen.keySet())
 		{
 			((Steppable)(objectsOnScreen.get(id))).step(deltaT);
-			// broadcastChange(id, objectsOnScreen.get(id));
+			broadcastChange(id, objectsOnScreen.get(id));
 		}
 		
 		lastTime = now;
@@ -196,7 +200,7 @@ public class StarRaptorServer extends TimerTask
 		broadcastRemove(whichID);
 		raptors.remove(whichID);
 		objectsOnScreen.remove(whichID);
-		
+		System.out.println("Client "+whichID+" disconnected.");
 	}
 	
 	/**
