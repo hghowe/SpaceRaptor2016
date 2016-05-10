@@ -4,6 +4,7 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 
 	private double vx, vy;
 	private boolean isTurningLeft, isTurningRight, isThrusting, isFiring;
+	private double timeSinceLastFire;
 	
 	private PrintWriter myPrintWriter; // This is a writer that will send things to the corresponding client....
 	
@@ -19,7 +20,11 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 		isTurningRight = false;
 		isThrusting = false;
 		isFiring = false;
+		resetFireTime();
 	}
+	
+	public void resetFireTime() {timeSinceLastFire = 0;}
+	public boolean canFire() {return timeSinceLastFire > Constants.FIRE_RECHARGE_TIME;}
 	
 	public void setControlStates(boolean left, boolean right, boolean thrust, boolean fire)
 	{
@@ -33,6 +38,7 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 	
 	public void step(double deltaT)
 	{
+		timeSinceLastFire += deltaT;
 		if (isTurningLeft)
 			setAngle(getAngle()-Constants.TURN_RATE*deltaT);
 		if (isTurningRight)
