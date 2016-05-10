@@ -57,6 +57,7 @@ public class StarRaptorClient {
 	public void parseMessage(String message)
 	{
 		int theId;
+		//System.out.println("Parsing message: "+message);
 		String[] messageSequence = message.split(Constants.MJR_DIVIDER);
 		switch (Integer.parseInt(messageSequence[0]))
 		{
@@ -72,13 +73,14 @@ public class StarRaptorClient {
 					newbie = raptor;
 					
 				}
-				
 				objectsOnScreen.put(theId, newbie);
+				System.out.println("There are now "+objectsOnScreen.size()+" objects on screen.");
 			break;
 			case Constants.PREFIX_UPDATE_OBJECT:
 				theId = Integer.parseInt(messageSequence[1]);
 				Transmittable objectInQuestion = objectsOnScreen.get(theId);
 				objectInQuestion.updateFromDescription(messageSequence[2]);
+				
 			break;
 			case Constants.PREFIX_REMOVE_OBJECT:
 				theId = Integer.parseInt(messageSequence[1]);
