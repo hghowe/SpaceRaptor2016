@@ -22,4 +22,5 @@ public interface Constants {
 	public final int MAX_RAPTOR_SPEED_SQUARED = 40000;
 	
 	public final double BULLET_LIFETIME = 1.0;
+	public final double FIRE_RECHARGE_TIME = 0.5;
 }
