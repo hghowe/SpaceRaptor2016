@@ -60,9 +60,7 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 	public void setxPos(double xPos) 
 	{
 		Date now = new Date();
-		deltaT = (now.getTime() - lastTime.getTime())/1000.0
-				
-				.;
+		deltaT = (now.getTime() - lastTime.getTime())/1000.0;
 		vx = (super.getxPos() - xPos)/deltaT;
 		super.setxPos(xPos);
 	}

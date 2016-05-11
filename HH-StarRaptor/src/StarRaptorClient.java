@@ -93,6 +93,7 @@ public class StarRaptorClient {
 				thePanel.lock();
 				Transmittable objectInQuestion = objectsOnScreen.get(theId);
 				thePanel.unlock();
+				if(objectInQuestion != null)
 				objectInQuestion.updateFromDescription(messageSequence[2]);
 				
 			break;
