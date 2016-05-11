@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,10 +15,14 @@ public class GamePanel extends JPanel implements KeyListener{
 	private boolean objectsLocked;
 	private boolean leftPressed, rightPressed, thrustPressed, firePressed;
 	private StarRaptorClient theClient;
+	private Map<Integer,Transmittable> objectsToAdd;
+	private ArrayList<Integer> idsToRemove;
 	
 	public GamePanel() {
 		super();
 		objectsOnScreen = new HashMap<Integer,Transmittable>();
+		objectsToAdd = new HashMap<Integer,Transmittable>();
+		idsToRemove = new ArrayList<Integer>();
 		leftPressed = false;
 		rightPressed = false;
 		thrustPressed = false;
@@ -32,15 +37,14 @@ public class GamePanel extends JPanel implements KeyListener{
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		while(locked());
-		lock();
+		
 		for (Integer key:objectsOnScreen.keySet())
 		{
 			if (objectsOnScreen.containsKey(key) && objectsOnScreen.get(key) != null)
 				((Drawable)(objectsOnScreen.get(key))).drawSelf(g);
 		}
-		unlock();
 		
+		updateObjects();
 	}
 
 	@Override
@@ -94,6 +98,32 @@ public class GamePanel extends JPanel implements KeyListener{
 				initials.indexOf(Constants.MJR_DIVIDER)>-1 ||
 				initials.indexOf(Constants.MNR_DIVIDER)>-1);
 		return initials.substring(0,Math.min(3, initials.length())).toUpperCase();
+	}
+	
+	public void add(int id, Transmittable val)
+	{
+		objectsToAdd.put(id, val);
+	}
+	
+	public void remove(int id)
+	{
+		idsToRemove.add(id);
+	}
+	
+	public void updateObjects()
+	{
+		for(Integer i: idsToRemove)
+		{
+			if(objectsOnScreen.containsKey(i))
+				objectsOnScreen.remove(i);
+		}
+		for(Integer key: objectsToAdd.keySet())
+		{
+			if (objectsToAdd.containsKey(key) && objectsToAdd.get(key) != null)
+				objectsOnScreen.put(key, objectsToAdd.get(key));
+		}
+		objectsToAdd.clear();
+		idsToRemove.clear();
 	}
 	
 	public void lock()

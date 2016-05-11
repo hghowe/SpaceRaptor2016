@@ -81,28 +81,23 @@ public class StarRaptorClient {
 				{
 					System.out.println("Uh-oh. created a null object.");
 				}
-				while(thePanel.locked());
-				thePanel.lock();
-				objectsOnScreen.put(theId, newbie);
-				thePanel.unlock();
+				
+				thePanel.add(theId, newbie);
+				
 				System.out.println("There are now "+objectsOnScreen.size()+" objects on screen.");
 			break;
 			case Constants.PREFIX_UPDATE_OBJECT:
 				theId = Integer.parseInt(messageSequence[1]);
 				while(thePanel.locked());
-				thePanel.lock();
 				Transmittable objectInQuestion = objectsOnScreen.get(theId);
-				thePanel.unlock();
 				if(objectInQuestion != null)
 				objectInQuestion.updateFromDescription(messageSequence[2]);
 				
 			break;
 			case Constants.PREFIX_REMOVE_OBJECT:
 				theId = Integer.parseInt(messageSequence[1]);
-				while(thePanel.locked());
-				thePanel.lock();
-				objectsOnScreen.remove(theId);
-				thePanel.unlock();
+				thePanel.remove(theId);
+				
 			break;
 		
 		}
