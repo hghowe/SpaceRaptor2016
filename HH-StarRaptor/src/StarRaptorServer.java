@@ -253,6 +253,7 @@ public class StarRaptorServer extends TimerTask
 		private Scanner myScanner;
 		
 		private String myInitials;
+		private String myColor;
 		private int myID;
 		
 		public ClientReader(Socket s, PrintWriter pw)
@@ -263,6 +264,7 @@ public class StarRaptorServer extends TimerTask
 			{
 				myScanner = new Scanner(mySocket.getInputStream());
 				myInitials = myScanner.nextLine(); // assumes the first thing sent by a new client is its name...
+				myColor = myScanner.nextLine(); // assumes the first thing sent by a new client is its name...
 				
 				myID = nextAvailableID; // (from the outer class, which we have access to.)
 				

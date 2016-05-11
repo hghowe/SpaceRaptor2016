@@ -35,7 +35,14 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 		if (this.isPlayer)
 			g2d.setColor(new Color(255,255,255));
 		else
-			g2d.setColor(new Color(255,0,0));
+			if(this.getColor().equals("GREEN")) {
+				g2d.setColor(new Color(0,255,0));
+			}
+			else if(this.getColor().equals("BLUE")) {
+				g2d.setColor(new Color(0,0,255));
+			} else {
+				g2d.setColor(new Color(255,0,0));
+			}
 		g2d.setFont(initialFont);
 		
 		AffineTransform AF = g2d.getTransform();

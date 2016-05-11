@@ -3,11 +3,13 @@ public class AbstractRaptor implements Transmittable {
 
 	private int id;
 	private String initials;
+	private String color;
 	private double xPos, yPos, angle;
 	
 	public AbstractRaptor() {
 		id = -1;
 		initials = "AAA";
+		color = "RED";
 		xPos = 0;
 		yPos = 0;
 		angle = 0;
@@ -39,6 +41,20 @@ public class AbstractRaptor implements Transmittable {
 	 */
 	public void setInitials(String initials) {
 		this.initials = initials;
+	}
+	
+	/**
+	 * @return the color
+	 */
+	public String getColor() {
+		return color;
+	}
+
+	/**
+	 * @param color the color to set
+	 */
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	/**
@@ -110,7 +126,8 @@ public class AbstractRaptor implements Transmittable {
 				initials+Constants.MNR_DIVIDER+
 				xPos+Constants.MNR_DIVIDER+
 				yPos+Constants.MNR_DIVIDER+
-				angle;
+				angle+
+				color+Constants.MNR_DIVIDER;
 	}
 	
 	/** (fulfilling Transmittable)
@@ -126,6 +143,7 @@ public class AbstractRaptor implements Transmittable {
 		setxPos(Double.parseDouble(parts[2]));
 		setyPos(Double.parseDouble(parts[3]));
 		setAngle(Double.parseDouble(parts[4]));
+		setColor(parts[5]);
 	}
 	
 	/** (fulfilling Transmittable)

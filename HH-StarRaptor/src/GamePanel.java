@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		rightPressed = false;
 		thrustPressed = false;
 		firePressed = false;
-		theClient = new StarRaptorClient(objectsOnScreen, requestInitials(), this);
+		theClient = new StarRaptorClient(objectsOnScreen, requestInitials(), this, requestColor());
 		setBackground(Color.BLACK);
 	}
 
@@ -89,5 +89,22 @@ public class GamePanel extends JPanel implements KeyListener{
 				initials.indexOf(Constants.MJR_DIVIDER)>-1 ||
 				initials.indexOf(Constants.MNR_DIVIDER)>-1);
 		return initials.substring(0,Math.min(3, initials.length())).toUpperCase();
+	}
+	
+	/**
+	 * asks the user for his/her name. 
+	 * @return a non-empty String.
+	 */
+	public String requestColor()
+	{
+		String color;
+		do
+		{
+		   color = JOptionPane.showInputDialog("Please enter your color.");
+		} while (color == null || 
+				color.equals("") ||
+				color.indexOf(Constants.MJR_DIVIDER)>-1 ||
+				color.indexOf(Constants.MNR_DIVIDER)>-1);
+		return color.substring(0,Math.min(3, color.length())).toUpperCase();
 	}
 }

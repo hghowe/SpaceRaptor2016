@@ -13,6 +13,7 @@ public class StarRaptorClient {
 	private String myInitials;
 	private int myId;
 	private String myName;
+	private String myColor;
 	private Map<Integer,Transmittable> objectsOnScreen;
 	private JPanel thePanel;
 	
@@ -21,10 +22,11 @@ public class StarRaptorClient {
 	private PrintWriter 	mySocketWriter;
 
 	
-	public StarRaptorClient(Map<Integer,Transmittable> objMap, String name, JPanel panel) 
+	public StarRaptorClient(Map<Integer,Transmittable> objMap, String name, JPanel panel, String color) 
 	{
 		objectsOnScreen = objMap;
 		myName = name;
+		myColor = color;
 		thePanel = panel;
 		setupConnection();	
 	}
@@ -44,6 +46,7 @@ public class StarRaptorClient {
 			readerThread.start();
 			
 			mySocketWriter.println(myName); // add my name to the things to send to the server
+			mySocketWriter.println(myColor); // add my name to the things to send to the server
 			mySocketWriter.flush();         // ...and send it.
 			// Note: the server is expecting you to immediately send your name.
 			System.out.println("Connected.");
