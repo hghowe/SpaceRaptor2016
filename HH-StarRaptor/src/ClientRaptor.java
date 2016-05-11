@@ -3,16 +3,22 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.Date;
 
 public class ClientRaptor extends AbstractRaptor implements Drawable{
 
 	private boolean isPlayer;
 	private Font initialFont;
+	private Date lastTime;
+	private double deltaT;
+	private double vx,vy;
+	
 	
 	public ClientRaptor() {
 		super();
 		isPlayer = false;
 		initialFont = new Font("Arial",Font.PLAIN,8);
+		lastTime = new Date();
 	}
 
 	/**
@@ -50,6 +56,26 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 		g2d.setTransform(AF);
 		
 	}
+		
+	public void setxPos(double xPos) 
+	{
+		Date now = new Date();
+		deltaT = (now.getTime() - lastTime.getTime())/1000.0
+				
+				.;
+		vx = (super.getxPos() - xPos)/deltaT;
+		super.setxPos(xPos);
+	}
+	
+	public void setyPos(double yPos) 
+	{
+		vy = (super.getyPos() - yPos)/deltaT;
+		super.setyPos(yPos);
+		deltaT = 0;
+		lastTime = new Date();
+	}
+	
+	
 	
 	
 

@@ -53,7 +53,7 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 		if (vMagSquared > Constants.MAX_RAPTOR_SPEED_SQUARED)
 		{
 			double vMag = Math.sqrt(vMagSquared);
-			vx *= Constants.MAX_RAPTOR_SPEED/vMag;
+			vx *= 1; //Constants.MAX_RAPTOR_SPEED/vMag;
 			vy *= Constants.MAX_RAPTOR_SPEED/vMag;
 		}
 		
