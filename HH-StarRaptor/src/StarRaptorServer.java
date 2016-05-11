@@ -59,7 +59,7 @@ public class StarRaptorServer extends TimerTask
 				
 				// build a ServerRaptor instance that will represent the person on the other end of this connection, one
 				//    to whom we can send messages.
-				ServerRaptor nextRaptor = new ServerRaptor(cr.getInitials(),nextAvailableID, pw); 
+				ServerRaptor nextRaptor = new ServerRaptor(cr.getInitials(),nextAvailableID, pw, cr.getColor()); 
 				nextRaptor.setxPos(Math.random()*Constants.SCREEN_WIDTH);
 				nextRaptor.setyPos(Math.random()*Constants.SCREEN_HEIGHT);
 				nextRaptor.setAngle(Math.random()*Math.PI*2);
@@ -264,7 +264,7 @@ public class StarRaptorServer extends TimerTask
 			{
 				myScanner = new Scanner(mySocket.getInputStream());
 				myInitials = myScanner.nextLine(); // assumes the first thing sent by a new client is its name...
-				myColor = myScanner.nextLine(); // assumes the first thing sent by a new client is its name...
+				myColor = myScanner.nextLine(); // assumes the second thing sent by a new client is its color...
 				
 				myID = nextAvailableID; // (from the outer class, which we have access to.)
 				
@@ -281,6 +281,8 @@ public class StarRaptorServer extends TimerTask
 			}
 		}
 		public String getInitials() { return myInitials; }
+		
+		public String getColor() { return myColor; }
 	
 		@Override
 		/**

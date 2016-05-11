@@ -8,9 +8,10 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 	
 	private PrintWriter myPrintWriter; // This is a writer that will send things to the corresponding client....
 	
-	public ServerRaptor(String initials, int id, PrintWriter pw) {
+	public ServerRaptor(String initials, int id, PrintWriter pw, String color) {
 		super();
 		this.setInitials(initials);
+		this.setColor(color);
 		this.setId(id);
 		myPrintWriter = pw;
 		

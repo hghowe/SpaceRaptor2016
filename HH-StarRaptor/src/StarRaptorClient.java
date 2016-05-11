@@ -46,7 +46,7 @@ public class StarRaptorClient {
 			readerThread.start();
 			
 			mySocketWriter.println(myName); // add my name to the things to send to the server
-			mySocketWriter.println(myColor); // add my name to the things to send to the server
+			mySocketWriter.println(myColor); // add my color to the things to send to the server
 			mySocketWriter.flush();         // ...and send it.
 			// Note: the server is expecting you to immediately send your name.
 			System.out.println("Connected.");

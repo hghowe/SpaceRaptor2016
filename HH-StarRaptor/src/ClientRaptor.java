@@ -32,9 +32,12 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 	public void drawSelf(Graphics g)
 	{
 		Graphics2D g2d = (Graphics2D)g;
-		if (this.isPlayer)
+		if (this.isPlayer) { 
+//			System.out.println(this.getColor());
 			g2d.setColor(new Color(255,255,255));
+		}
 		else
+//			System.out.println(this.getColor());
 			if(this.getColor().equals("GREEN")) {
 				g2d.setColor(new Color(0,255,0));
 			}

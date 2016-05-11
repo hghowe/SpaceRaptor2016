@@ -105,6 +105,7 @@ public class GamePanel extends JPanel implements KeyListener{
 				color.equals("") ||
 				color.indexOf(Constants.MJR_DIVIDER)>-1 ||
 				color.indexOf(Constants.MNR_DIVIDER)>-1);
-		return color.substring(0,Math.min(3, color.length())).toUpperCase();
+		System.out.println(color.toUpperCase());
+		return color.toUpperCase();
 	}
 }
