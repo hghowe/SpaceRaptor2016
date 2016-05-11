@@ -126,8 +126,8 @@ public class AbstractRaptor implements Transmittable {
 				initials+Constants.MNR_DIVIDER+
 				xPos+Constants.MNR_DIVIDER+
 				yPos+Constants.MNR_DIVIDER+
-				angle+
-				color+Constants.MNR_DIVIDER;
+				angle+Constants.MNR_DIVIDER+
+				color;
 	}
 	
 	/** (fulfilling Transmittable)
