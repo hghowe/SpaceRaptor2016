@@ -24,4 +24,6 @@ public interface Constants {
 	public final double BULLET_LIFETIME = 1.0;
 	public final double FIRE_RECHARGE_TIME = 0.5;
 	public final double BULLET_SPEED = 225;
+	
+	public final int RAPTOR_BULLET_COLLISION_DISTANCE_SQUARED = 25;
 }
