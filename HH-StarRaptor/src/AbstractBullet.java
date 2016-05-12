@@ -64,7 +64,7 @@ public abstract class AbstractBullet implements Transmittable {
 	 * @return description
 	 */
 	public String shortDescription()
-	{ return xPos+Constants.MNR_DIVIDER+yPos; }
+	{ return id+Constants.MNR_DIVIDER+xPos+Constants.MNR_DIVIDER+yPos; }
 	
 	/**
 	 * create a string describing the information needed to <i>create</i> this object
@@ -96,8 +96,8 @@ public abstract class AbstractBullet implements Transmittable {
 	public void updateFromDescription(String shortDesc)
 	{
 		String[] parts = shortDesc.split(Constants.MNR_DIVIDER);
-		xPos = Double.parseDouble(parts[0]);
-		yPos = Double.parseDouble(parts[1]);
+		xPos = Double.parseDouble(parts[1]);
+		yPos = Double.parseDouble(parts[2]);
 	}
 	
 	
