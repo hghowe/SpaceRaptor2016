@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,9 @@ public class StarRaptorServer extends TimerTask
 	private Map<Integer,Transmittable> objectsOnScreen;
 	private Map<Integer,ServerRaptor> raptors;
 	private Map<Integer,ServerBullet> bullets;
-	
+	private ArrayList<ServerRaptor> raptorsToAdd;
+	private ArrayList<ServerRaptor> raptorsToRemove;
+	private ArrayList<ServerBullet> bulletsToRemove;
 	private Date lastTime;
 	
 	public StarRaptorServer() {
@@ -31,11 +34,13 @@ public class StarRaptorServer extends TimerTask
 		objectsOnScreen = new HashMap<Integer,Transmittable>();
 		raptors = new HashMap<Integer,ServerRaptor>();
 		bullets = new HashMap<Integer,ServerBullet>();
+		raptorsToAdd = new ArrayList<ServerRaptor>();
+		raptorsToRemove = new ArrayList<ServerRaptor>();
+		bulletsToRemove = new ArrayList<ServerBullet>();
 		t.scheduleAtFixedRate(this, 0, 20); 	// this is the TimerTask class whose run()
 		// method will be called. 0 is the delay before
 		// the method is called first; 20 is the delay
 		// (in ms) between calls of run().
-
 		setupNetworking();
 		
 	}
@@ -65,12 +70,11 @@ public class StarRaptorServer extends TimerTask
 				nextRaptor.setAngle(Math.random()*Math.PI*2);
 				System.out.println("Added: "+nextRaptor.longDescription());
 				// add the new raptor to the list of all raptors.
-				objectsOnScreen.put(nextAvailableID, nextRaptor);
-				raptors.put(nextAvailableID, nextRaptor);
-				tellRaptorAll(nextAvailableID);
+//				objectsOnScreen.put(nextAvailableID, nextRaptor);
 				
-				// tell everybody about this new raptor.
-				broadcastAdd(nextAvailableID, nextRaptor);
+				raptorsToAdd.add(nextRaptor);			
+				
+				
 				
 				nextAvailableID++;
 			}
@@ -79,6 +83,40 @@ public class StarRaptorServer extends TimerTask
         {
             e.printStackTrace();
         }	
+	}
+	
+	public void updateObjectsOnScreen()
+	{
+		while (!raptorsToAdd.isEmpty())
+		{
+			ServerRaptor raptor = raptorsToAdd.remove(0);
+			objectsOnScreen.put(raptor.getId(),raptor);
+			raptors.put(raptor.getId(), raptor);
+			tellRaptorAll(raptor.getId());
+			// tell everybody about this new raptor.
+			broadcastAdd(raptor.getId(), raptor);
+		}
+		
+		while (!raptorsToRemove.isEmpty())
+		{
+			int rId = raptorsToRemove.remove(0).getId();
+			objectsOnScreen.remove(rId);
+			raptors.remove(rId);
+		}
+	}
+	
+	public void fireBullet(ServerRaptor raptor)
+	{
+		ServerBullet bullet = new ServerBullet();
+		bullet.setxPos(raptor.getxPos());
+		bullet.setyPos(raptor.getyPos());
+		bullet.setVx(Constants.BULLET_SPEED * Math.cos(raptor.getAngle()));
+		bullet.setVy(Constants.BULLET_SPEED * Math.sin(raptor.getAngle()));
+		objectsOnScreen.put(bullet.getId(),bullet);
+		bullets.put(bullet.getId(),bullet);
+		broadcastAdd(bullet.getId(),bullet);
+		
+		raptor.resetFireTime();
 	}
 	
 	/**
@@ -98,40 +136,62 @@ public class StarRaptorServer extends TimerTask
 		double deltaT = (now.getTime() - lastTime.getTime())/1000.0;  // the difference in time since the last time we were here.
 																	 // getTime is measured in milliseconds, so we divide by 
 																	 // 1000.0 to get seconds.
+		updateObjectsOnScreen();
 		
+		// step everything.
 		for (Integer id: objectsOnScreen.keySet())
 		{
 			((Steppable)(objectsOnScreen.get(id))).step(deltaT);
 			broadcastChange(id, objectsOnScreen.get(id));
 		}
 		
+		// possibly fire bullets....
 		for (Integer id: raptors.keySet())
 		{
 			if ((raptors.get(id).isFiring()) && (raptors.get(id).canFire()))
 			{
-				ServerBullet bullet = new ServerBullet();
-				bullet.setxPos(raptors.get(id).getxPos());
-				bullet.setyPos(raptors.get(id).getyPos());
-				bullet.setVx(Constants.BULLET_SPEED * Math.cos(raptors.get(id).getAngle()));
-				bullet.setVy(Constants.BULLET_SPEED * Math.sin(raptors.get(id).getAngle()));
-				objectsOnScreen.put(bullet.getId(),bullet);
-				bullets.put(bullet.getId(),bullet);
-				broadcastAdd(bullet.getId(),bullet);
+				fireBullet(raptors.get(id));
 				
-				raptors.get(id).resetFireTime();
 			}	
 		}
-		
-		for (Integer id: bullets.keySet())
+		// expire bullets and detect collisions.
+		for (Integer bulId: bullets.keySet())
 		{
-			if (! bullets.get(id).isAlive())
+			if (! bullets.get(bulId).isAlive())
 			{
-				objectsOnScreen.remove(id);
-				bullets.remove(id);
-				broadcastRemove(id);
+				bulletsToRemove.add(bullets.get(bulId));
+				broadcastRemove(bulId);
 			}
+			else
+			{
+				ServerBullet b = bullets.get(bulId);
+				for (Integer rapId: raptors.keySet())
+				{
+					ServerRaptor r = raptors.get(rapId);
+					double d2 = Math.pow(b.getxPos()-r.getxPos(), 2) +
+							Math.pow(b.getyPos()-r.getyPos(), 2);
+					if (d2<Constants.RAPTOR_BULLET_COLLISION_DISTANCE_SQUARED)
+					{
+						r.setHealth(r.getHealth()-Constants.HEALTH_LOSS_PER_HIT);
+						bulletsToRemove.add(bullets.get(bulId));
+						if (r.getHealth()<0)
+						{
+							r.setxPos(Math.random()*Constants.SCREEN_WIDTH);
+							r.setyPos(Math.random()*Constants.SCREEN_HEIGHT);
+							r.setHealth(1.0);
+						}
+					}
+				}
+				
+			}
+			
 		}
-		
+		while (!bulletsToRemove.isEmpty())
+		{
+			int b = bulletsToRemove.remove(0).getId();
+			objectsOnScreen.remove(b);
+			bullets.remove(b);
+		}
 		
 		lastTime = now;
 		
@@ -232,8 +292,8 @@ public class StarRaptorServer extends TimerTask
 	public void disconnectClient(int whichID)
 	{
 		broadcastRemove(whichID);
-		raptors.remove(whichID);
-		objectsOnScreen.remove(whichID);
+		raptorsToRemove.add(raptors.get(whichID));
+//		objectsOnScreen.remove(whichID);
 		System.out.println("Client "+whichID+" disconnected.");
 	}
 	
