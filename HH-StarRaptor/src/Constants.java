@@ -21,7 +21,7 @@ public interface Constants {
 	public final int MAX_RAPTOR_SPEED = 200;
 	public final int MAX_RAPTOR_SPEED_SQUARED = 40000;
 	
-	public final double BULLET_LIFETIME = 1.0;
+	public final double BULLET_LIFETIME = 1.75;
 	public final double FIRE_RECHARGE_TIME = 0.5;
 	public final double BULLET_SPEED = 100; // the relative speed of the bullet, compared to the raptor.
 	public final double BULLET_LAUNCH_OFFSET = 10; // the distance in front of the raptor where the bullet appears
