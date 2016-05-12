@@ -42,6 +42,7 @@ public class ClientRaptor extends AbstractRaptor implements Drawable{
 			g2d.translate(getxPos(), getyPos());
 			int stringWidth = g2d.getFontMetrics().stringWidth(getInitials());
 			g2d.drawString(getInitials(), -stringWidth/2, -10);
+			g2d.drawLine(-10, 10, (int)(-10+20*getHealth()), 10);
 			g2d.rotate(getAngle());
 			g2d.drawLine(4, 0, -3, -2);
 			g2d.drawLine(-3, -2, -1, 0);
