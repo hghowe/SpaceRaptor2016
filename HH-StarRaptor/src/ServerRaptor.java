@@ -76,4 +76,18 @@ public class ServerRaptor extends AbstractRaptor implements Steppable{
 		myPrintWriter.println(message);
 		myPrintWriter.flush();
 	}
+
+	/**
+	 * @return the vx
+	 */
+	public double getVx() {
+		return vx;
+	}
+
+	/**
+	 * @return the vy
+	 */
+	public double getVy() {
+		return vy;
+	}	
 }
