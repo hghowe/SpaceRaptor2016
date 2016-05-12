@@ -21,6 +21,7 @@ public class StarRaptorServer extends TimerTask
 	private Map<Integer,ServerRaptor> raptors;
 	private Map<Integer,ServerBullet> bullets;
 	private ArrayList<ServerRaptor> raptorsToAdd;
+	private ArrayList<ServerBullet> bulletsToAdd;
 	private ArrayList<ServerRaptor> raptorsToRemove;
 	private ArrayList<ServerBullet> bulletsToRemove;
 	private Date lastTime;
@@ -35,6 +36,7 @@ public class StarRaptorServer extends TimerTask
 		raptors = new HashMap<Integer,ServerRaptor>();
 		bullets = new HashMap<Integer,ServerBullet>();
 		raptorsToAdd = new ArrayList<ServerRaptor>();
+		bulletsToAdd = new ArrayList<ServerBullet>();
 		raptorsToRemove = new ArrayList<ServerRaptor>();
 		bulletsToRemove = new ArrayList<ServerBullet>();
 		t.scheduleAtFixedRate(this, 0, 20); 	// this is the TimerTask class whose run()
@@ -103,19 +105,35 @@ public class StarRaptorServer extends TimerTask
 			objectsOnScreen.remove(rId);
 			raptors.remove(rId);
 		}
+		while (!bulletsToRemove.isEmpty())
+		{
+			int bId = bulletsToRemove.remove(0).getId();
+			objectsOnScreen.remove(bId);
+			bullets.remove(bId);
+			broadcastRemove(bId);
+		}
+		while (!bulletsToAdd.isEmpty())
+		{
+			ServerBullet b = bulletsToAdd.remove(0);
+			System.out.println("Adding bullet #"+b.getId()+": "+b.longDescription());
+			objectsOnScreen.put(b.getId(), b);
+			bullets.put(b.getId(), b);
+			broadcastAdd(b.getId(),b);
+		}
 	}
 	
 	public void fireBullet(ServerRaptor raptor)
 	{
+		System.out.println("Firing. "+nextAvailableID);
 		ServerBullet bullet = new ServerBullet();
-		bullet.setxPos(raptor.getxPos());
-		bullet.setyPos(raptor.getyPos());
-		bullet.setVx(Constants.BULLET_SPEED * Math.cos(raptor.getAngle()));
-		bullet.setVy(Constants.BULLET_SPEED * Math.sin(raptor.getAngle()));
-		objectsOnScreen.put(bullet.getId(),bullet);
-		bullets.put(bullet.getId(),bullet);
-		broadcastAdd(bullet.getId(),bullet);
+		bullet.setxPos(raptor.getxPos()+Constants.BULLET_LAUNCH_OFFSET*Math.cos(raptor.getAngle()));
+		bullet.setyPos(raptor.getyPos()+Constants.BULLET_LAUNCH_OFFSET*Math.sin(raptor.getAngle()));
+		bullet.setVx(raptor.getVx()+ Constants.BULLET_SPEED * Math.cos(raptor.getAngle()));
+		bullet.setVy(raptor.getVy()+ Constants.BULLET_SPEED * Math.sin(raptor.getAngle()));
+		bullet.setId(nextAvailableID);
+		bulletsToAdd.add(bullet);
 		
+		nextAvailableID ++;
 		raptor.resetFireTime();
 	}
 	
@@ -137,10 +155,11 @@ public class StarRaptorServer extends TimerTask
 																	 // getTime is measured in milliseconds, so we divide by 
 																	 // 1000.0 to get seconds.
 		updateObjectsOnScreen();
-		
-		// step everything.
+//		System.out.println(objectsOnScreen.keySet());
+//		// step everything.
 		for (Integer id: objectsOnScreen.keySet())
 		{
+			
 			((Steppable)(objectsOnScreen.get(id))).step(deltaT);
 			broadcastChange(id, objectsOnScreen.get(id));
 		}
@@ -186,12 +205,7 @@ public class StarRaptorServer extends TimerTask
 			}
 			
 		}
-		while (!bulletsToRemove.isEmpty())
-		{
-			int b = bulletsToRemove.remove(0).getId();
-			objectsOnScreen.remove(b);
-			bullets.remove(b);
-		}
+		
 		
 		lastTime = now;
 		
@@ -209,6 +223,8 @@ public class StarRaptorServer extends TimerTask
 						 id+
 						 Constants.MJR_DIVIDER+
 						 obj.shortDescription();
+		if (id == 1)
+			System.out.println(message);
 		for (Integer key: raptors.keySet())
 			raptors.get(key).sendMessage(message);
 	}
