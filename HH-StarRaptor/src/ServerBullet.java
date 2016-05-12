@@ -13,9 +13,19 @@ public class ServerBullet extends AbstractBullet implements Steppable{
 	
 	public void step(double deltaT)
 	{
+		System.out.println("Bullet stepping.");
 		lifetimeRemaining -= deltaT;
 		setxPos(getxPos() + vx*deltaT);
 		setyPos(getyPos() + vy*deltaT);
+		
+		if (getxPos() < 0)
+			setxPos(getxPos()+Constants.SCREEN_WIDTH);
+		if (getxPos() > Constants.SCREEN_WIDTH)
+			setxPos(getxPos()-Constants.SCREEN_WIDTH);
+		if (getyPos() < 0)
+			setyPos(getyPos()+Constants.SCREEN_HEIGHT);
+		if (getyPos() > Constants.SCREEN_HEIGHT)
+			setyPos(getyPos()-Constants.SCREEN_WIDTH);
 	}
 	
 	public boolean isAlive() {return lifetimeRemaining > 0;}
