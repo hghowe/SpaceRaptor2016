@@ -26,4 +26,5 @@ public interface Constants {
 	public final double BULLET_SPEED = 225;
 	
 	public final int RAPTOR_BULLET_COLLISION_DISTANCE_SQUARED = 25;
+	public final double HEALTH_LOSS_PER_HIT = 0.0667;
 }
