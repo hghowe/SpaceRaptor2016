@@ -69,15 +69,15 @@ public class StarRaptorClient {
 					if (theId == myId)
 						raptor.setPlayer(true);
 					newbie = raptor;
+					thePanel.addObject(newbie);
 				}
 				else if (type == Constants.TYPE_BULLET)
 				{
 					ClientBullet bullet = new ClientBullet();
 					bullet.buildFromDescription(messageSequence[3]);
 					newbie = bullet;
+					thePanel.addObject(newbie);
 				}
-				thePanel.addObject(newbie);
-				
 			break;
 			case Constants.PREFIX_UPDATE_OBJECT:
 				thePanel.updateObject(messageSequence[2]);
