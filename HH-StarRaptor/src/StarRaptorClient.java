@@ -77,6 +77,10 @@ public class StarRaptorClient {
 					bullet.buildFromDescription(messageSequence[3]);
 					thePanel.addObject(bullet);
 				}
+				else
+				{
+					System.out.println("Uh-oh. created a null object.");
+				}
 				
 				
 			break;
