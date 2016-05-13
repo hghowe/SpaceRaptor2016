@@ -35,6 +35,7 @@ public class GamePanel extends JPanel implements KeyListener{
 	public void addObject(Transmittable obj)
 	{
 		objectsToAdd.add(obj);
+		System.out.println("Adding object "+obj.shortDescription());
 	}
 	
 	public void updateObject(String s)
@@ -62,7 +63,10 @@ public class GamePanel extends JPanel implements KeyListener{
 		{
 			String shortDesc = objectsToUpdate.remove(0);
 			int id = Integer.parseInt(shortDesc.split(Constants.MNR_DIVIDER)[0]);
-			objectsOnScreen.get(id).updateFromDescription(shortDesc);
+			if (objectsOnScreen.containsKey(id))
+				objectsOnScreen.get(id).updateFromDescription(shortDesc);
+//			else
+//				System.out.println("Couldn't find key "+id);
 		}
 		while (!objectsToRemove.isEmpty())
 		{

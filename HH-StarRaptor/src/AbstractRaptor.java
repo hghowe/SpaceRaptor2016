@@ -3,7 +3,7 @@ public class AbstractRaptor implements Transmittable {
 
 	private int id;
 	private String initials;
-	private double xPos, yPos, angle;
+	private double xPos, yPos, angle, health;
 	
 	public AbstractRaptor() {
 		id = -1;
@@ -11,6 +11,7 @@ public class AbstractRaptor implements Transmittable {
 		xPos = 0;
 		yPos = 0;
 		angle = 0;
+		health = 1.0;
 	}
 
 	/**
@@ -87,6 +88,20 @@ public class AbstractRaptor implements Transmittable {
 		while (this.angle>=2*Math.PI)
 			this.angle -= 2*Math.PI;
 	}
+	
+	/**
+	 * @return the health
+	 */
+	public double getHealth() {
+		return health;
+	}
+
+	/**
+	 * @param health the health to set
+	 */
+	public void setHealth(double health) {
+		this.health = health;
+	}
 
 	/** (fulfilling Transmittable)
 	 * create a string describing just the information needed to <i>update</i> this object
@@ -97,7 +112,8 @@ public class AbstractRaptor implements Transmittable {
 		return  id+Constants.MNR_DIVIDER+
 				xPos+Constants.MNR_DIVIDER+
 				yPos+Constants.MNR_DIVIDER+
-				angle;
+				angle+Constants.MNR_DIVIDER+
+				health;
 	}
 	
 	/** (fulfilling Transmittable)
@@ -110,7 +126,8 @@ public class AbstractRaptor implements Transmittable {
 				initials+Constants.MNR_DIVIDER+
 				xPos+Constants.MNR_DIVIDER+
 				yPos+Constants.MNR_DIVIDER+
-				angle;
+				angle+Constants.MNR_DIVIDER+
+				health;
 	}
 	
 	/** (fulfilling Transmittable)
@@ -126,6 +143,7 @@ public class AbstractRaptor implements Transmittable {
 		setxPos(Double.parseDouble(parts[2]));
 		setyPos(Double.parseDouble(parts[3]));
 		setAngle(Double.parseDouble(parts[4]));
+		setHealth(Double.parseDouble(parts[5]));
 	}
 	
 	/** (fulfilling Transmittable)
@@ -140,6 +158,7 @@ public class AbstractRaptor implements Transmittable {
 		setxPos(Double.parseDouble(parts[1]));
 		setyPos(Double.parseDouble(parts[2]));
 		setAngle(Double.parseDouble(parts[3]));
+		setHealth(Double.parseDouble(parts[4]));
 	}
 	
 	

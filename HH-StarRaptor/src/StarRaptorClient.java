@@ -60,6 +60,7 @@ public class StarRaptorClient {
 		switch (Integer.parseInt(messageSequence[0]))
 		{
 			case Constants.PREFIX_NEW_OBJECT:
+				System.out.println("Got here.");
 				int type = Integer.parseInt(messageSequence[1]);
 				theId = Integer.parseInt(messageSequence[2]);
 				Transmittable newbie = null;
@@ -68,15 +69,13 @@ public class StarRaptorClient {
 					raptor.buildFromDescription(messageSequence[3]);
 					if (theId == myId)
 						raptor.setPlayer(true);
-					newbie = raptor;
-					thePanel.addObject(newbie);
+					thePanel.addObject(raptor);
 				}
 				else if (type == Constants.TYPE_BULLET)
 				{
 					ClientBullet bullet = new ClientBullet();
 					bullet.buildFromDescription(messageSequence[3]);
-					newbie = bullet;
-					thePanel.addObject(newbie);
+					thePanel.addObject(bullet);
 				}
 			break;
 			case Constants.PREFIX_UPDATE_OBJECT:
